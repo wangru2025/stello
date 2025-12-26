@@ -1,0 +1,80 @@
+[build-system]
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "stello"
+version = "1.0.0"
+description = "中文静态网站生成器 - A Static Site Generator for Chinese Users"
+readme = "README.md"
+requires-python = ">=3.8"
+license = {text = "MIT"}
+authors = [
+    {name = "Stello Contributors", email = "admin@wangru.net"},
+]
+keywords = [
+    "static-site-generator",
+    "ssg",
+    "markdown",
+    "chinese",
+    "dsl",
+    "website",
+    "blog",
+    "documentation",
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Intended Audience :: End Users/Desktop",
+    "License :: OSI Approved :: MIT License",
+    "Natural Language :: Chinese (Simplified)",
+    "Natural Language :: English",
+    "Operating System :: OS Independent",
+    "Programming Language :: Python",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.8",
+    "Programming Language :: Python :: 3.9",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Internet :: WWW/HTTP :: Dynamic Content",
+    "Topic :: Internet :: WWW/HTTP :: Site Management",
+    "Topic :: Office/Business",
+    "Topic :: Text Processing :: Markup :: Markdown",
+]
+dependencies = [
+    "Jinja2>=3.1.4",
+    "Markdown>=3.6",
+]
+
+[project.urls]
+"Bug Tracker" = "https://github.com/wangru2025/stello/issues"
+"Documentation" = "https://github.com/wangru2025/stello#readme"
+"API Documentation" = "https://github.com/wangru2025/stello/blob/main/API.md"
+"Source Code" = "https://github.com/wangru2025/stello"
+"Changelog" = "https://github.com/wangru2025/stello/blob/main/CHANGELOG.md"
+
+[project.scripts]
+stello = "stello.main:main"
+
+[tool.setuptools]
+packages = ["stello"]
+
+[tool.setuptools.package-data]
+stello = [
+    "themes/**/*.html",
+    "themes/**/*.css",
+]
+
+[tool.black]
+line-length = 127
+target-version = ['py38']
+
+[tool.isort]
+profile = "black"
+line_length = 127
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = "test_*.py"
