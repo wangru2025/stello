@@ -1,0 +1,110 @@
+name: Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+  schedule:
+    # 每周一早上 8 点运行
+    - cron: '0 8 * * 1'
+
+jobs:
+  test:
+    runs-on: ${{ matrix.os }}
+    strategy:
+      fail-fast: false
+      matrix:
+        os: [ubuntu-latest, windows-latest, macos-latest]
+        python-version: ['3.8', '3.9', '3.10', '3.11', '3.12']
+
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python ${{ matrix.python-version }}
+      uses: actions/setup-python@v4
+      with:
+        python-version: ${{ matrix.python-version }}
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+        pip install pytest pytest-cov
+
+    - name: Run tests
+      run: |
+        python -m pytest tests/ -v --cov=stello --cov-report=xml --cov-report=term
+
+    - name: Upload coverage to Codecov
+      uses: codecov/codecov-action@v3
+      with:
+        file: ./coverage.xml
+        flags: unittests
+        name: codecov-umbrella
+        fail_ci_if_error: false
+
+  lint:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install flake8 pylint
+
+    - name: Lint with flake8
+      run: |
+        # 停止构建如果有语法错误或未定义的名称
+        flake8 stello --count --select=E9,F63,F7,F82 --show-source --statistics
+        # exit-zero 处理所有错误为警告
+        flake8 stello --count --exit-zero --max-complexity=10 --max-line-length=127 --statistics
+
+  build-site:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v3
+
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+
+    - name: Install dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install -r requirements.txt
+
+    - name: Build example site
+      run: |
+        python -c "
+from stello.build.build_site import SiteBuilder
+try:
+    builder = SiteBuilder('examples/config.dsl')
+    builder.build()
+    print('✓ 示例网站构建成功')
+except Exception as e:
+    print(f'✗ 构建失败: {e}')
+    exit(1)
+"
+
+    - name: Build official site
+      run: |
+        python -c "
+from stello.build.build_site import SiteBuilder
+try:
+    builder = SiteBuilder('official-site/config.dsl')
+    builder.build()
+    print('✓ 官方网站构建成功')
+except Exception as e:
+    print(f'✗ 构建失败: {e}')
+    exit(1)
+"
