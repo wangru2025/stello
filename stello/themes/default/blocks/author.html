@@ -1,0 +1,17 @@
+<!-- 作者信息块 -->
+<footer class="page-footer">
+    {% if page_tags %}
+    <p class="page-tags">
+        标签:
+        {% for tag in page_tags %}
+        <span class="tag">{{ tag }}</span>
+        {% endfor %}
+    </p>
+    {% endif %}
+    {% if page_source %}
+    <p class="page-source">来源: {{ page_source }}</p>
+    {% endif %}
+    {% if page_author %}
+    <p class="page-author">作者: {{ page_author }}</p>
+    {% endif %}
+</footer>

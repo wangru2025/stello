@@ -1,0 +1,10 @@
+<!-- 导航块 -->
+{% if navigation %}
+<nav class="main-nav">
+    <ul>
+        {% for item in navigation %}
+        <li><a href="{{ item.url }}">{{ item.title }}</a></li>
+        {% endfor %}
+    </ul>
+</nav>
+{% endif %}

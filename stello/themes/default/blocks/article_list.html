@@ -1,0 +1,24 @@
+<!-- 文章列表块 -->
+{% if articles %}
+<div class="article-list">
+    {% for article in articles %}
+    <article class="article-item">
+        <h3><a href="{{ article.url }}">{{ article.title }}</a></h3>
+        {% if article.date %}
+        <p class="article-date">{{ article.date }}</p>
+        {% endif %}
+        {% if article.summary %}
+        <p class="article-summary">{{ article.summary }}</p>
+        {% endif %}
+        {% if article.tags %}
+        <p class="article-tags">
+            {% for tag in article.tags %}
+            <span class="tag">{{ tag }}</span>
+            {% endfor %}
+        </p>
+        {% endif %}
+        <a href="{{ article.url }}" class="read-more">阅读全文 →</a>
+    </article>
+    {% endfor %}
+</div>
+{% endif %}
